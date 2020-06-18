@@ -41,8 +41,8 @@
     <link rel="stylesheet" type="text/css" href="../css/font-awesome.min.css?changed=2017083001">
     <title>Jackett Search</title>
 </head>
-<body onload="showSearch()">
-
+<body onload="exec()">
+    	
     <div id="modals"></div>
 
     <script id="setup-item-nonlocalrecaptcha" type="text/x-handlebars-template">
@@ -191,7 +191,7 @@
                 </thead>
                 <tbody>
                     {{#each indexers}}
-                    <tr class="unconfigured-indexer-row">
+                    <tr class="unconfigured-indexer-	row">
                         <td><a target="_blank" href="{{site_link}}" title="{{description}}">{{name}}</a></td>
                         <td>{{mains_cats}}</td>
                         <td class="fit"><span title="{{type}}" class="label label-{{type_label}}" style="text-transform: capitalize;">{{type}}</span></td>
@@ -323,7 +323,7 @@
                         <div align="center"> <img id="logo" src="../jacket_medium.png" alt="Logo"  /><span id="header-title">Jackett Search</span>
                     </div>
                     <div class="modal-body">
-                        <div align="center">
+			<div align="center">
                         <input class="form-control" type="text" name="query" style="height:50px;font-size:18px;" id="searchquery"/><br>
                         <label for="tracker">Site</label>
                         <select name="tracker" id="searchTracker" multiple="multiple">
@@ -336,7 +336,7 @@
                         <button id="jackett-search-perform" class="btn btn-success btn-sm"><span class="fa fa-search"></span></button></div></div>
                         <div id="searchResults"></div>
                     </div>
-                </div>
+		</div>
                 </div>
             </div>
         </div>
@@ -367,8 +367,8 @@
                     <th style="display:none;">Grabs</th>
                     <th>Seeds</th>
                     <th>Leechers</th>
-                    <th style="display:none;"></th>
-                    <th style="display:none;"></th>
+		    <th style="display:none;"></th>
+		    <th style="display:none;"></th>
                     <th>Download</th>
                 </tr>
             </thead>
@@ -530,5 +530,11 @@
 
     <script type="text/javascript" src="../libs/api.js?changed=2017083001"></script>
     <script type="text/javascript" src="../custom.js?changed=20200410"></script>
+    <script>
+     function exec(){
+     showSearch();
+     $("#select-indexer-modal").off();
+	}
+    </script>
 </body>
 </html>
