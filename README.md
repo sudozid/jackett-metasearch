@@ -1,3 +1,5 @@
+![screenshot](https://i.ibb.co/t2dVZ3y/Capture.png)
+
 Jackett has a thing called “Manual Search” which is used to manually search on multiple trackers without automation tools such as sonarr or radarr, similar to certain torrent search engines like torrentz.
 I have modified Jackett’s index.html and made following changes:
 1.	Load the manual search automatically when the page is opened (onload=showSearch())
