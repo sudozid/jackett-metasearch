@@ -41,7 +41,7 @@
     <link rel="stylesheet" type="text/css" href="../css/font-awesome.min.css?changed=2017083001">
     <title>Jackett Search</title>
 </head>
-<body onload="exec()">
+<body>
     	
     <div id="modals"></div>
 
@@ -129,18 +129,198 @@
         </div>
     </script>
 
+
+    <script id="configured-indexer-table" type="text/x-handlebars-template">
+        <div class="configured-indexer-div">
+            <table id="configured-indexer-datatable" class="indexer-table dataTable compact cell-border hover stripe table table-responsive">
+                <thead>
+                    <tr>
+                        <th>Indexer</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {{#each indexers}}
+                    <tr class="configured-indexer-row">
+                        <td><a target="_blank" href="{{site_link}}" title="{{description}}">{{name}}</a> <span title="{{type}}" class="label label-{{type_label}}" style="text-transform: capitalize;">{{type}}</span></td>
+                        <td class="fit">
+                            <div class="indexer-buttons">
+                                <a href="{{rss_host}}" title="{{rss_host}}" role="button" class="indexer-button-copy btn btn-xs btn-info">Copy RSS Feed</i></a>
+                                <a href="{{torznab_host}}" title="{{torznab_host}}" role="button" class="indexer-button-copy btn btn-xs btn-info">Copy Torznab Feed</a>
+                                <a href="{{potato_host}}" title="{{potato_host}}" role="button" class="indexer-button-copy btn btn-xs btn-info{{#unless potatoenabled}} disabled{{/unless}}">Copy Potato Feed</a>
+
+                                <button title="Search" class="btn btn-success btn-xs indexer-button-search" data-id="{{id}}">
+                                    <span class="glyphicon glyphicon-search" aria-hidden="true"></span>
+                                </button>
+                                <button title="Configure" class="btn btn-primary btn-xs indexer-setup" data-id="{{id}}" data-link="{{site_link}}">
+                                    <span class="glyphicon glyphicon-wrench" aria-hidden="true"></span>
+                                </button>
+                                <button title="Delete" class="btn btn-danger btn-xs indexer-button-delete" data-id="{{id}}">
+                                    <span class="glyphicon glyphicon-trash" aria-hidden="true"></span>
+                                </button>
+                                <button title="{{last_error}}" class="btn btn-warning btn-xs indexer-button-test" data-toggle="tooltip" data-id="{{id}}" data-state="{{state}}">
+                                    Test
+                                    <span class="glyphicon" aria-hidden="true"></span>
+                                </button>
+                            </div>
+                        </td>
+                    </tr>
+                    {{/each}}
+                </tbody>
+                <tfoot>
+                    <tr>
+                        <td colspan="2"></td>
+                    </tr>
+                </tfoot>
+            </table>
+        </div>
+    </script>
+
+    <script id="unconfigured-indexer-table" type="text/x-handlebars-template">
+        <div class="unconfigured-indexer-div">
+            <table id="unconfigured-indexer-datatable" class="indexer-table dataTable compact cell-border hover stripe table table-responsive">
+                <thead>
+                    <tr>
+                        <th>Indexer</th>
+                        <th>Categories</th>
+                        <th>Type</th>
+                        <th>Type string</th>
+                        <th>Language</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {{#each indexers}}
+                    <tr class="unconfigured-indexer-	row">
+                        <td><a target="_blank" href="{{site_link}}" title="{{description}}">{{name}}</a></td>
+                        <td>{{mains_cats}}</td>
+                        <td class="fit"><span title="{{type}}" class="label label-{{type_label}}" style="text-transform: capitalize;">{{type}}</span></td>
+                        <td>{{type}}</td>
+                        <td class="fit">{{language}}</td>
+                        <td class="fit">
+                            <div class="indexer-buttons">
+                                <button title="Configure" class="btn btn-primary btn-xs indexer-setup" data-id="{{id}}" data-link="{{site_link}}">
+                                    <span class="glyphicon glyphicon-wrench" aria-hidden="true"></span>
+                                </button>
+                                {{#if_eq type "public"}}
+                                <button title="Add" class="btn btn-success btn-xs indexer-add" data-id="{{id}}" data-link="{{site_link}}">
+                                    <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
+                                </button>
+                                {{/if_eq}}
+                            </div>
+                        </td>
+                    </tr>
+                    {{/each}}
+                </tbody>
+                <tfoot>
+                    <tr>
+                        <td colspan="6"></td>
+                    </tr>
+                </tfoot>
+            </table>
+        </div>
+    </script>
+
+    <script id="jackett-releases" type="text/x-handlebars-template">
+        <div id="select-indexer-modal" class="modal fade" tabindex="-1" role="dialog" aria-hidden="false">
+            <div class="modal-dialog modal-lg modal-fillwidth">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                        <h4 class="modal-title">Cached Releases</h4>
+                    </div>
+                    <div class="modal-body">
+                        <p>This screen shows releases which have been recently returned from Jackett. Only the last 300 releases for each tracker are returned.</p>
+                        <table id="jackett-releases-datatable" class="dataTable compact cell-border hover stripe">
+                            <thead>
+                                <tr>
+                                    <th>Published</th>
+                                    <th>First Seen</th>
+                                    <th>Published</th>
+                                    <th>First Seen</th>
+                                    <th>Tracker</th>
+                                    <th>Name</th>
+                                    <th>Size</th>
+                                    <th>Size</th>
+                                    <th>Files</th>
+                                    <th>Category</th>
+                                    <th>Grabs</th>
+                                    <th>Seeds</th>
+                                    <th>Leechers</th>
+                                    <th class="fit">DL Factor</th>
+                                    <th class="fit">UL Factor</th>
+                                    <th>Download</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {{#each releases}}
+                                <tr class="jackett-releases-row" data-imdb="{{Imdb}}" data-banner="{{BannerUrl}}" data-description="{{Description}}">
+                                    <td class="fit">{{PublishDate}}</td>
+                                    <td class="fit">{{FirstSeen}}</td>
+                                    <td class="fit">{{jacketTimespan PublishDate}}</td>
+                                    <td class="fit">{{jacketTimespan FirstSeen}}</td>
+                                    <td class="fit">{{Tracker}}</td>
+                                    <td class="Title"><a href="{{Comments}}">{{Title}}</a> <span class="release-labels"></span></td>
+                                    <td class="fit">{{Size}}</td>
+                                    <td class="fit">{{jacketSize Size}}</td>
+                                    <td class="fit">{{Files}}</td>
+                                    <td class="fit">{{CategoryDesc}}</td>
+                                    <td class="fit">{{Grabs}}</td>
+                                    <td class="fit">{{Seeders}}</td>
+                                    <td class="fit">{{Peers}}</td>
+                                    <td class="fit DownloadVolumeFactor">{{DownloadVolumeFactor}}</td>
+                                    <td class="fit UploadVolumeFactor">{{UploadVolumeFactor}}</td>
+                                    <td class="fit downloadcolumn">
+                                        {{#if Link}}
+                                        <a class="downloadlink" title="Download locally" href="{{Link}}"><i class="fa fa-download"></i></a>
+                                        {{/if}}
+                                        {{#if MagnetUri}}
+                                        <a class="downloadlink" title="Download locally (magnet)" href="{{MagnetUri}}"><i class="fa fa-magnet"></i></a>
+                                        {{/if}}
+                                        {{#if BlackholeLink}}
+                                        <a class="downloadlink jacketdownloadserver" title="Save to server blackhole directory" href="{{BlackholeLink}}"><i class="fa fa-upload"></i></a>
+                                        {{/if}}
+                                    </td>
+                                </tr>
+                                {{/each}}
+                            </tbody>
+                            <tfoot>
+                                <tr>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                </tr>
+                            </tfoot>
+                        </table>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </script>
+
     <script id="jackett-search" type="text/x-handlebars-template">
         <div id="select-indexer-modal" class="modal fade in" tabindex="-1" role="dialog" aria-hidden="false">
             <div class="modal-dialog modal-lg modal-fillwidth">
-                <div id="searchdiv" class="modal-content">
+                <div class="modal-content">
                     <div class="modal-header">
                         <!-- <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button> -->
-                        			
-			<div align="center">
-			<input type="button" id="adminlogin" value="Admin Login"/>
-			<img id="logo" src="../jacket_medium.png" alt="Logo"  />
-			<span id="header-title">Jackett Search</span>
-                        </div>
+                        <div align="center"> <img id="logo" src="../jacket_medium.png" alt="Logo"  /><span id="header-title">Jackett Search</span>
                     </div>
                     <div class="modal-body">
 			<div align="center">
@@ -153,18 +333,12 @@
                         </select>
                         <label for="category">Category</label>
                         <select name="category" id="searchCategory" multiple="multiple"></select>
-                        <button id="jackett-search-perform" class="btn btn-success btn-sm"><span class="fa fa-search"></span> Search</button></div></div>
+                        <button id="jackett-search-perform" class="btn btn-success btn-sm"><span class="fa fa-search"></span></button></div></div>
                         <div id="searchResults"></div>
-			
-			<div id="footer">
-			<hr>
-	                <a href="https://github.com/Jackett/Jackett" target="_blank" title="Jackett on GitHub">Jackett</a> Version <span id="app-version">0.16.728.0</span>
-        		</div>
                     </div>
 		</div>
                 </div>
             </div>
-			
         </div>
     </script>
 
@@ -191,7 +365,7 @@
                     <th style="display:none;">Files</th>
                     <th>Category</th>
                     <th style="display:none;">Grabs</th>
-                    <th>Seeds</th>
+                    <th id="see">Seeds</th>
                     <th>Leechers</th>
 		    <th style="display:none;"></th>
 		    <th style="display:none;"></th>
@@ -248,6 +422,103 @@
             </tfoot>
         </table>
     </script>
+    <script id="select-indexer" type="text/x-handlebars-template">
+        <div id="select-indexer-modal" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                        <h4 class="modal-title">Select an indexer to setup</h4>
+                    </div>
+                    <div class="modal-body">
+                        <div id="unconfigured-indexers">
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </script>
+
+    <script id="jackett-logs" type="text/x-handlebars-template">
+        <div id="select-indexer-modal" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">
+            <div class="modal-dialog modal-lg modal-fillwidth">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                        <h4 class="modal-title">Server Logs</h4>
+                    </div>
+                    <div class="modal-body">
+                        <table class="dataTable compact cell-border hover stripe">
+                            <thead>
+                                <tr>
+                                    <th>Date</th>
+                                    <th>Level</th>
+                                    <th>Message</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {{#each logs}}
+                                <tr class="jackettlog{{Level}}">
+                                    <td class="jackettlog-narrowcol">{{dateFormat When}}</td>
+                                    <td class="jackettlog-narrowcol">{{Level}}</td>
+                                    <td><pre>{{Message}}</pre></td>
+                                </tr>
+                                {{/each}}
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </script>
+
+    <script id="jackett-config-setup-modal" type="text/x-handlebars-template">
+        <div class="config-setup-modal modal fade" tabindex="-1" role="dialog" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                        <h4 class="modal-title">{{title}} - <a target="_blank" href="{{link}}">{{link}}</a></h4>
+                        {{#if description}}
+                        <div class="alert alert-info">{{description}}</div>
+                        {{/if}}
+                    </div>
+                    <div class="modal-body">
+                        <form class="config-setup-form"></form>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-primary setup-indexer-go">Okay</button>
+                    </div>
+                    <div class="indexer-caps">
+                        <h4>Capabilities</h4>
+                        <table class="dataTable compact cell-border hover stripe">
+                            <thead>
+                                <tr>
+                                    <th>Category</th>
+                                    <th>Description</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {{#each caps}}
+                                <tr>
+                                    <td>{{ID}}</td>
+                                    <td>{{Name}}</td>
+                                </tr>
+                                {{/each}}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </script>
 
     <script id="spinner" type="text/x-handlebars-template">
         <span class="spinner glyphicon glyphicon-refresh"></span>
@@ -263,7 +534,7 @@
      function exec(){
      showSearch();
      $("#select-indexer-modal").off();
-     }
+	}
     </script>
 </body>
 </html>
