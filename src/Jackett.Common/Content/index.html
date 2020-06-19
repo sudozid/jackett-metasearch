@@ -42,7 +42,7 @@
     <title>Jackett Search</title>
 </head>
 <body>
-    	
+    <div id="loading" style="text-align: center;position:relative;top:50px;color:white;font-size:16pt;">The page is loading, please wait...</div>    	
     <div id="modals"></div>
 
     <script id="setup-item-nonlocalrecaptcha" type="text/x-handlebars-template">
@@ -324,7 +324,7 @@
                     </div>
                     <div class="modal-body">
 			<div align="center">
-                        <input class="form-control" type="text" name="query" style="height:50px;font-size:18px;" id="searchquery"/><br>
+                        <input class="form-control" type="text" name="query" placeholder="Enter what you want here" style="height:50px;font-size:18px;" id="searchquery"/><br>
                         <label for="tracker">Site</label>
                         <select name="tracker" id="searchTracker" multiple="multiple">
                             {{#each indexers}}
@@ -343,8 +343,12 @@
     </script>
 
     <script id="jackett-search-results" type="text/x-handlebars-template">
-        <hr />
-        <p>Your search was done using:
+        <div id="mobilenotice">
+	<p>Downloads are located on the last row, 
+	swipe right on table to see on mobile.</p>
+	</div>
+	</p>
+        <p style="text-align:center;">Your search was done using:
             {{#each Indexers}}{{Name}}
             {{#if Error}}
             (<span title="{{Error}}"><b>Error</b></span>)
@@ -418,9 +422,16 @@
                     <td></td>
                     <td></td>
                     <td></td>
+		    
                 </tr>
             </tfoot>
         </table>
+	<hr>
+	<div id="footer">
+            <a href="https://github.com/Jackett/Jackett" target="_blank" title="Jackett on GitHub">Jackett</a> Version <span id="app-version">0.16.728.0</span>
+	    <br>
+	    <a href="https://github.com/misterpoop/jackett-metasearch" target="_blank" title="Metasearch Jackett">Help fix my terribly implemented mod of Jackett UI here</a>
+        </div>	
     </script>
     <script id="select-indexer" type="text/x-handlebars-template">
         <div id="select-indexer-modal" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">

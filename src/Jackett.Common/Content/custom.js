@@ -999,7 +999,8 @@ function updateSearchResultTable(element, results) {
                   var newInputSearch = inputSearch.clone();
                   newInputSearch.attr("custom", "true");
                   newInputSearch.attr("data-toggle", "tooltip");
-                  newInputSearch.attr("title", "Search query consists of several keywords.\nKeyword starting with \"-\" is considered a negative match.");
+		  newInputSearch.attr("placeholder","Filter from results here");
+                  newInputSearch.attr("title", "Keyword starting with &quot;-&quot; is considered a negative match.Search query consists of several keywords.\nKeyword starting with \"-\" is considered a negative match.");
                   newInputSearch.on("input", function () {
                     var newKeywords = [];
                     var filterTextKeywords = $(this).val().split(" ");
