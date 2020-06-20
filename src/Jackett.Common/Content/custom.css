@@ -2,9 +2,11 @@ body {
     background-image: url("binding_dark.png");
     background-repeat: repeat;
 }
-#mobilenotice{
+
+#mobilenotice {
     display: none;
 }
+
 #page {
     border-radius: 6px;
     background-color: white;
@@ -13,15 +15,26 @@ body {
     margin: 30px auto 100px;
 }
 
-.container-fluid {
+#loading {
+    text-align: center;
+    position: relative;
+    top: 50px;
+    color: white;
+    font-size: 16pt;
 }
+
+.container-fluid {}
+
 #jackett-search-perform {
     position: absolute;
     right: 310px;
     top: 25px;
 }
+
 #adminlogin {
-position: absolute; right: 15px;top: 27px; 
+    position: absolute;
+    right: 15px;
+    top: 27px;
 }
 
 #templates {
@@ -29,12 +42,12 @@ position: absolute; right: 15px;top: 27px;
 }
 
 #indexers {
-   text-align: center;
-   margin-top: 20px;
+    text-align: center;
+    margin-top: 20px;
 }
 
 .indexer-table {
-   text-align: left;
+    text-align: left;
 }
 
 .test-success {
@@ -53,12 +66,12 @@ position: absolute; right: 15px;top: 27px;
     text-align: center;
 }
 
-.indexer-buttons > .btn {
+.indexer-buttons>.btn {
     margin-bottom: 2px;
 }
 
 .indexer-button-test {
-   width: 60px;
+    width: 60px;
 }
 
 .setup-item-inputstring {
@@ -82,7 +95,7 @@ position: absolute; right: 15px;top: 27px;
     max-width: 255px;
 }
 
-[data-type=hiddendata]{
+[data-type=hiddendata] {
     display: none;
 }
 
@@ -97,7 +110,6 @@ position: absolute; right: 15px;top: 27px;
     from {
         -moz-transform: rotate(0deg);
     }
-
     to {
         -moz-transform: rotate(360deg);
     }
@@ -107,7 +119,6 @@ position: absolute; right: 15px;top: 27px;
     from {
         -webkit-transform: rotate(0deg);
     }
-
     to {
         -webkit-transform: rotate(360deg);
     }
@@ -117,7 +128,6 @@ position: absolute; right: 15px;top: 27px;
     from {
         transform: rotate(0deg);
     }
-
     to {
         transform: rotate(360deg);
     }
@@ -135,13 +145,13 @@ hr {
     margin: 4px 0;
 }
 
-    .input-area > * {
-        vertical-align: middle;
-    }
+.input-area>* {
+    vertical-align: middle;
+}
 
-    .input-area > p {
-        margin-top: 10px;
-    }
+.input-area>p {
+    margin-top: 10px;
+}
 
 .input-header {
     font-size: 18px;
@@ -175,22 +185,25 @@ hr {
     text-align: center;
 }
 
-#jackett-allowext, #jackett-allowupdate, #jackett-logging, #jackett-prerelease {
+#jackett-allowext,
+#jackett-allowupdate,
+#jackett-logging,
+#jackett-prerelease {
     width: 25px;
 }
 
 .modal-fillwidth {
     width: 1200px;
-    min-width:80%;
+    min-width: 80%;
 }
 
 .indexer-caps {
-   padding: 0 15px 15px 15px;
-   border-top: 1px solid #e5e5e5;
+    padding: 0 15px 15px 15px;
+    border-top: 1px solid #e5e5e5;
 }
 
 .indexer-caps table {
-    border-bottom:   1px solid #ddd;
+    border-bottom: 1px solid #ddd;
 }
 
 .jackettlog-narrowcol {
@@ -216,7 +229,7 @@ hr {
 }
 
 .downloadcolumn {
-    text-align:center;
+    text-align: center;
 }
 
 pre {
@@ -230,22 +243,30 @@ pre {
     border: 0;
     border-radius: 0;
     word-break: normal;
-    white-space: pre-wrap;       /* Since CSS 2.1 */
-    white-space: -moz-pre-wrap;  /* Mozilla, since 1999 */
-    white-space: -pre-wrap;      /* Opera 4-6 */
-    white-space: -o-pre-wrap;    /* Opera 7 */
-    word-wrap: break-word;       /* Internet Explorer 5.5+ */
+    white-space: pre-wrap;
+    /* Since CSS 2.1 */
+    white-space: -moz-pre-wrap;
+    /* Mozilla, since 1999 */
+    white-space: -pre-wrap;
+    /* Opera 4-6 */
+    white-space: -o-pre-wrap;
+    /* Opera 7 */
+    word-wrap: break-word;
+    /* Internet Explorer 5.5+ */
 }
 
 .modal-open .modal {
-    overflow-x: auto;  /* Model can be bigger than the screen on mobiles */
+    overflow-x: auto;
+    /* Model can be bigger than the screen on mobiles */
 }
 
 .dataTables_length {
     white-space: nowrap;
 }
 
-.dataTables_length select, .dataTables_filter input, .dataTable.compact tfoot td select {
+.dataTables_length select,
+.dataTables_filter input,
+.dataTable.compact tfoot td select {
     display: inline-block;
     height: 26px;
     padding: 0 8px;
@@ -278,11 +299,12 @@ pre {
 #unconfigured-indexers-template {
     display: none;
 }
-.jackett-apikey{
+
+.jackett-apikey {
     margin-top: 10px;
 }
 
-.jackett-apikey .input-header{
+.jackett-apikey .input-header {
     width: 80px;
 }
 
@@ -290,7 +312,7 @@ pre {
     display: none;
 }
 
-table td.fit{
+table td.fit {
     white-space: nowrap;
     width: 1%;
 }

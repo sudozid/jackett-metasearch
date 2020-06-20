@@ -5,7 +5,7 @@ var configuredIndexers = [];
 var unconfiguredIndexers = [];
 
 $.fn.inView = function() {
-    if(!this.length) return false;
+    if (!this.length) return false;
     var rect = this.get(0).getBoundingClientRect();
 
     return (
@@ -16,26 +16,26 @@ $.fn.inView = function() {
     );
 };
 
-$.fn.focusWithoutScrolling = function () {
+$.fn.focusWithoutScrolling = function() {
     if (this.inView())
         this.focus();
     return this;
 };
 
-$(document).ready(function () {
+$(document).ready(function() {
     $.ajaxSetup({ cache: false });
     //window.jackettIsLocal = window.location.hostname === '127.0.0.1';
     window.jackettIsLocal = false; // reCaptcha can't be solved via 127.0.0.1 anymore. This loophold was fixed by google around 2.10.2017
 
     Handlebars.registerHelper('if_eq', function(a, b, opts) {
-	    if (a == b)
-	        return opts.fn(this);
-	    else
-	        return opts.inverse(this);
+        if (a == b)
+            return opts.fn(this);
+        else
+            return opts.inverse(this);
     });
 
     Handlebars.registerHelper('if_in', function(elem, list, opts) {
-        if(list.indexOf(elem) > -1) {
+        if (list.indexOf(elem) > -1) {
             return opts.fn(this);
         }
 
@@ -52,14 +52,18 @@ $(document).ready(function () {
 
 function openSearchIfNecessary() {
     const hashArgs = location.hash.substring(1).split('&').reduce((prev, item) =>
-      Object.assign({
-        [item.split('=')[0]]: (item.split('=').length < 2 ?
-          undefined :
-          decodeURIComponent(item.split('=')[1].replace(/\+/g,'%20')))
-      }, prev), {});
-        showSearch(hashArgs.tracker, hashArgs.search, hashArgs.category);
-	$("#select-indexer-modal").off();
-	$("#see").click(); $("#see").click();
+        Object.assign({
+            [item.split('=')[0]]: (item.split('=').length < 2 ?
+                undefined :
+                decodeURIComponent(item.split('=')[1].replace(/\+/g, '%20')))
+        }, prev), {});
+    //removed if hash.location #search search otherwise categories won't show up
+    showSearch(hashArgs.tracker, hashArgs.search, hashArgs.category);
+    //disables event listeners of the backdrop
+    $("#select-indexer-modal").off();
+    //probably a stupid way to do it but this clicks on seeders th twice to sort by seeders
+    $("#see").click();
+    $("#see").click();
 }
 
 function insertWordWrap(str) {
@@ -68,13 +72,13 @@ function insertWordWrap(str) {
 }
 
 function getJackettConfig(callback) {
-    api.getServerConfig(callback).fail(function () {
+    api.getServerConfig(callback).fail(function() {
         doNotify("Error loading Jackett settings, request to Jackett server failed, is server running ?", "danger", "glyphicon glyphicon-alert");
     });
 }
 
 function loadJackettSettings() {
-    getJackettConfig(function (data) {
+    getJackettConfig(function(data) {
         $("#api-key-input").val(data.api_key);
         $(".api-key-text").text(data.api_key);
         $("#app-version").html(data.app_version);
@@ -111,7 +115,7 @@ function loadJackettSettings() {
             $("#can-upgrade-from-mono").show();
         }
 
-        $.each(data.notices, function (index, value) {
+        $.each(data.notices, function(index, value) {
             console.log(value);
             doNotify(value, "danger", "glyphicon glyphicon-alert", false);
         })
@@ -123,7 +127,7 @@ function loadJackettSettings() {
 
 function reloadIndexers() {
     $('#indexers').hide();
-    api.getAllIndexers(function (data) {
+    api.getAllIndexers(function(data) {
         indexers = data;
         configuredIndexers = [];
         unconfiguredIndexers = [];
@@ -140,14 +144,11 @@ function reloadIndexers() {
 
             if (item.type == "public") {
                 item.type_label = "success";
-            }
-            else if (item.type == "private") {
+            } else if (item.type == "private") {
                 item.type_label = "danger";
-            }
-            else if (item.type == "semi-private") {
+            } else if (item.type == "semi-private") {
                 item.type_label = "warning";
-            }
-            else {
+            } else {
                 item.type_label = "default";
             }
 
@@ -166,7 +167,7 @@ function reloadIndexers() {
         displayConfiguredIndexersList(configuredIndexers);
         $('#indexers div.dataTables_filter input').focusWithoutScrolling();
         openSearchIfNecessary();
-    }).fail(function () {
+    }).fail(function() {
         doNotify("Error loading indexers, request to Jackett server failed, is server running ?", "danger", "glyphicon glyphicon-alert");
     });
 }
@@ -179,28 +180,31 @@ function displayConfiguredIndexersList(indexers) {
     prepareSetupButtons(indexersTable);
     prepareDeleteButtons(indexersTable);
     prepareCopyButtons(indexersTable);
-    indexersTable.find("table").dataTable(
-         {
-             "stateSave": true,
-             "stateDuration": 0,
-             "pageLength": -1,
-             "lengthMenu": [[10, 20, 50, 100, 250, 500, -1], [10, 20, 50, 100, 250, 500, "All"]],
-             "order": [[0, "asc"]],
-             "columnDefs": [
-                {
-                    "targets": 0,
-                    "visible": true,
-                    "searchable": true,
-                    "orderable": true
-                },
-                {
-                    "targets": 1,
-                    "visible": true,
-                    "searchable": true,
-                    "orderable": true
-                }
-             ]
-         });
+    indexersTable.find("table").dataTable({
+        "stateSave": true,
+        "stateDuration": 0,
+        "pageLength": -1,
+        "lengthMenu": [
+            [10, 20, 50, 100, 250, 500, -1],
+            [10, 20, 50, 100, 250, 500, "All"]
+        ],
+        "order": [
+            [0, "asc"]
+        ],
+        "columnDefs": [{
+                "targets": 0,
+                "visible": true,
+                "searchable": true,
+                "orderable": true
+            },
+            {
+                "targets": 1,
+                "visible": true,
+                "searchable": true,
+                "orderable": true
+            }
+        ]
+    });
 
     $('#indexers').empty();
     $('#indexers').append(indexersTable);
@@ -211,105 +215,107 @@ function displayUnconfiguredIndexersList() {
     var UnconfiguredIndexersDialog = $($("#select-indexer").html());
 
     var indexersTemplate = Handlebars.compile($("#unconfigured-indexer-table").html());
-    var indexersTable = $(indexersTemplate({ indexers: unconfiguredIndexers, total_unconfigured_indexers: unconfiguredIndexers.length  }));
-    indexersTable.find('.indexer-setup').each(function (i, btn) {
+    var indexersTable = $(indexersTemplate({ indexers: unconfiguredIndexers, total_unconfigured_indexers: unconfiguredIndexers.length }));
+    indexersTable.find('.indexer-setup').each(function(i, btn) {
         var indexer = unconfiguredIndexers[i];
-        $(btn).click(function () {
-            $('#select-indexer-modal').modal('hide').on('hidden.bs.modal', function (e) {
+        $(btn).click(function() {
+            $('#select-indexer-modal').modal('hide').on('hidden.bs.modal', function(e) {
                 displayIndexerSetup(indexer.id, indexer.name, indexer.caps, indexer.link, indexer.alternativesitelinks, indexer.description);
-            
-	}
-	);
+
+            });
         });
     });
-    indexersTable.find('.indexer-add').each(function (i, btn) {
-        $(btn).click(function () {
-            $('#select-indexer-modal').modal('hide').on('hidden.bs.modal', function (e) {
+    indexersTable.find('.indexer-add').each(function(i, btn) {
+        $(btn).click(function() {
+            $('#select-indexer-modal').modal('hide').on('hidden.bs.modal', function(e) {
                 var indexerId = $(btn).attr("data-id");
-                api.getIndexerConfig(indexerId, function (data) {
-			        if (data.result !== undefined && data.result == "error") {
-			            doNotify("Error: " + data.error, "danger", "glyphicon glyphicon-alert");
-			            return;
-			        }
-	                api.updateIndexerConfig(indexerId, data, function (data) {
-		                if (data == undefined) {
-		                    reloadIndexers();
-		                    doNotify("Successfully configured " + name, "success", "glyphicon glyphicon-ok");
-		                } else if (data.result == "error") {
-		                    if (data.config) {
-		                        populateConfigItems(configForm, data.config);
-		                    }
-		                    doNotify("Configuration failed: " + data.error, "danger", "glyphicon glyphicon-alert");
-		                }
-			        }).fail(function (data) {
-                if(data.responseJSON.error !== undefined) {
-                  var indexEnd = 2048 - "https://github.com/Jackett/Jackett/issues/new?title=[".length - indexerId.length - "] ".length - " (Config)".length; // keep url <= 2k #5104
-                  doNotify("An error occurred while configuring this indexer<br /><b>" + data.responseJSON.error.substring(0, indexEnd) + "</b><br /><i><a href=\"https://github.com/Jackett/Jackett/issues/new?title=[" + indexerId + "] " + data.responseJSON.error.substring(0, indexEnd) + " (Config)\" target=\"_blank\">Click here to open an issue on GitHub for this indexer.</a><i>", "danger", "glyphicon glyphicon-alert", false);
-                } else {
-                  doNotify("An error occurred while configuring this indexer, is Jackett server running ?", "danger", "glyphicon glyphicon-alert");
-                }
-			        });
+                api.getIndexerConfig(indexerId, function(data) {
+                    if (data.result !== undefined && data.result == "error") {
+                        doNotify("Error: " + data.error, "danger", "glyphicon glyphicon-alert");
+                        return;
+                    }
+                    api.updateIndexerConfig(indexerId, data, function(data) {
+                        if (data == undefined) {
+                            reloadIndexers();
+                            doNotify("Successfully configured " + name, "success", "glyphicon glyphicon-ok");
+                        } else if (data.result == "error") {
+                            if (data.config) {
+                                populateConfigItems(configForm, data.config);
+                            }
+                            doNotify("Configuration failed: " + data.error, "danger", "glyphicon glyphicon-alert");
+                        }
+                    }).fail(function(data) {
+                        if (data.responseJSON.error !== undefined) {
+                            var indexEnd = 2048 - "https://github.com/Jackett/Jackett/issues/new?title=[".length - indexerId.length - "] ".length - " (Config)".length; // keep url <= 2k #5104
+                            doNotify("An error occurred while configuring this indexer<br /><b>" + data.responseJSON.error.substring(0, indexEnd) + "</b><br /><i><a href=\"https://github.com/Jackett/Jackett/issues/new?title=[" + indexerId + "] " + data.responseJSON.error.substring(0, indexEnd) + " (Config)\" target=\"_blank\">Click here to open an issue on GitHub for this indexer.</a><i>", "danger", "glyphicon glyphicon-alert", false);
+                        } else {
+                            doNotify("An error occurred while configuring this indexer, is Jackett server running ?", "danger", "glyphicon glyphicon-alert");
+                        }
+                    });
                 });
             });
         });
     });
-    indexersTable.find("table").DataTable(
-        {
-            "stateSave": true,
-            "stateDuration": 0,
-            "fnStateSaveParams": function (oSettings, sValue) {
-                sValue.search.search = ""; // don't save the search filter content
-                return sValue;
+    indexersTable.find("table").DataTable({
+        "stateSave": true,
+        "stateDuration": 0,
+        "fnStateSaveParams": function(oSettings, sValue) {
+            sValue.search.search = ""; // don't save the search filter content
+            return sValue;
+        },
+        "bAutoWidth": false,
+        "pageLength": -1,
+        "lengthMenu": [
+            [10, 20, 50, 100, 250, 500, -1],
+            [10, 20, 50, 100, 250, 500, "All"]
+        ],
+        "order": [
+            [0, "asc"]
+        ],
+        "columnDefs": [{
+                "name": "name",
+                "targets": 0,
+                "visible": true,
+                "searchable": true,
+                "orderable": true
             },
-            "bAutoWidth": false,
-            "pageLength": -1,
-            "lengthMenu": [[10, 20, 50, 100, 250, 500, -1], [10, 20, 50, 100, 250, 500, "All"]],
-            "order": [[0, "asc"]],
-            "columnDefs": [
-                {
-                    "name": "name",
-                    "targets": 0,
-                    "visible": true,
-                    "searchable": true,
-                    "orderable": true
-                },
-                {
-                    "name": "description",
-                    "targets": 1,
-                    "visible": true,
-                    "searchable": true,
-                    "orderable": true
-                },
-                {
-                    "name": "type",
-                    "targets": 2,
-                    "visible": true,
-                    "searchable": true,
-                    "orderable": true
-                },
-                {
-                    "name": "type_string",
-                    "targets": 3,
-                    "visible": false,
-                    "searchable": true,
-                    "orderable": true,
-                },
-                {
-                    "name": "language",
-                    "targets": 4,
-                    "visible": true,
-                    "searchable": true,
-                    "orderable": true
-                },
-                {
-                    "name": "buttons",
-                    "targets": 5,
-                    "visible": true,
-                    "searchable" : false,
-                    "orderable": false
-                }
-            ]
-        });
+            {
+                "name": "description",
+                "targets": 1,
+                "visible": true,
+                "searchable": true,
+                "orderable": true
+            },
+            {
+                "name": "type",
+                "targets": 2,
+                "visible": true,
+                "searchable": true,
+                "orderable": true
+            },
+            {
+                "name": "type_string",
+                "targets": 3,
+                "visible": false,
+                "searchable": true,
+                "orderable": true,
+            },
+            {
+                "name": "language",
+                "targets": 4,
+                "visible": true,
+                "searchable": true,
+                "orderable": true
+            },
+            {
+                "name": "buttons",
+                "targets": 5,
+                "visible": true,
+                "searchable": false,
+                "orderable": false
+            }
+        ]
+    });
 
     var undefindexers = UnconfiguredIndexersDialog.find('#unconfigured-indexers');
     undefindexers.append(indexersTable);
@@ -318,7 +324,7 @@ function displayUnconfiguredIndexersList() {
         $(this).find('div.dataTables_filter input').focusWithoutScrolling();
     });
 
-    UnconfiguredIndexersDialog.on('hidden.bs.modal', function (e) {
+    UnconfiguredIndexersDialog.on('hidden.bs.modal', function(e) {
         $('#indexers div.dataTables_filter input').focusWithoutScrolling();
     });
 
@@ -365,11 +371,11 @@ function copyToClipboard(text) {
 }
 
 function prepareCopyButtons(element) {
-    element.find(".indexer-button-copy").each(function (i, btn) {
+    element.find(".indexer-button-copy").each(function(i, btn) {
         var $btn = $(btn);
         var title = $btn[0].title;
 
-        $btn.click(function () {
+        $btn.click(function() {
             copyToClipboard(title);
             return false;
         });
@@ -377,19 +383,19 @@ function prepareCopyButtons(element) {
 }
 
 function prepareDeleteButtons(element) {
-    element.find(".indexer-button-delete").each(function (i, btn) {
+    element.find(".indexer-button-delete").each(function(i, btn) {
         var $btn = $(btn);
         var id = $btn.data("id");
-        $btn.click(function () {
-            api.deleteIndexer(id, function (data) {
+        $btn.click(function() {
+            api.deleteIndexer(id, function(data) {
                 if (data == undefined) {
                     doNotify("Deleted " + id, "success", "glyphicon glyphicon-ok");
                 } else if (data.result == "error") {
                     doNotify("Delete error for " + id + "\n" + data.error, "danger", "glyphicon glyphicon-alert");
                 }
-            }).fail(function () {
+            }).fail(function() {
                 doNotify("Error deleting indexer, request to Jackett server error", "danger", "glyphicon glyphicon-alert");
-            }).always(function () {
+            }).always(function() {
                 reloadIndexers();
             });
         });
@@ -397,28 +403,27 @@ function prepareDeleteButtons(element) {
 }
 
 function prepareSearchButtons(element) {
-    element.find('.indexer-button-search').each(function (i, btn) {
+    element.find('.indexer-button-search').each(function(i, btn) {
         var $btn = $(btn);
         var id = $btn.data("id");
         $btn.click(function() {
-            window.location.hash = "search&tracker=" +  id;
+            window.location.hash = "search&tracker=" + id;
             showSearch(id);
         });
     });
 }
 
 function prepareSetupButtons(element) {
-    element.find('.indexer-setup').each(function (i, btn) {
+    element.find('.indexer-setup').each(function(i, btn) {
         var indexer = configuredIndexers[i];
-        $(btn).click(function () {
+        $(btn).click(function() {
             displayIndexerSetup(indexer.id, indexer.name, indexer.caps, indexer.link, indexer.alternativesitelinks, indexer.description);
         });
     });
 }
 
-function updateTestState(id, state, message, parent)
-{
-    var btn = parent.find(".indexer-button-test[data-id=" +id + "]");
+function updateTestState(id, state, message, parent) {
+    var btn = parent.find(".indexer-button-test[data-id=" + id + "]");
 
     var sortmsg = message;
     if (!sortmsg || state == "success")
@@ -444,7 +449,7 @@ function updateTestState(id, state, message, parent)
     } else if (state == "inprogres") {
         icon.addClass("glyphicon-refresh test-inprogres spinner");
     }
-    var dt = $.fn.dataTable.tables({ visible: true, api: true}).rows().invalidate('dom');
+    var dt = $.fn.dataTable.tables({ visible: true, api: true }).rows().invalidate('dom');
     if (state != "inprogres")
         dt.draw();
 }
@@ -455,7 +460,7 @@ function testIndexer(id, notifyResult) {
 
     if (notifyResult)
         doNotify("Test started for " + id, "info", "glyphicon glyphicon-transfer");
-    api.testIndexer(id, function (data) {
+    api.testIndexer(id, function(data) {
         if (data == undefined) {
             updateTestState(id, "success", "Test successful", indexers);
             if (notifyResult)
@@ -465,40 +470,40 @@ function testIndexer(id, notifyResult) {
             if (notifyResult)
                 doNotify("Test failed for " + id + ": \n" + data.error, "danger", "glyphicon glyphicon-alert");
         }
-    }).fail(function (data) {
-      updateTestState(id, "error", data.error, indexers);
-      if(data.responseJSON.error !== undefined && notifyResult) {
-        var indexEnd = 2048 - "https://github.com/Jackett/Jackett/issues/new?title=[".length - id.length - "] ".length - " (Test)".length; // keep url <= 2k #5104
-        doNotify("An error occurred while testing this indexer<br /><b>" + data.responseJSON.error.substring(0, indexEnd) + "</b><br /><i><a href=\"https://github.com/Jackett/Jackett/issues/new?title=[" + id + "] " + data.responseJSON.error.substring(0, indexEnd) + " (Test)\" target=\"_blank\">Click here to open an issue on GitHub for this indexer.</a><i>", "danger", "glyphicon glyphicon-alert", false);
-      } else {
-        doNotify("An error occurred while testing indexers, please take a look at indexers with failed test for more informations.", "danger", "glyphicon glyphicon-alert");
-      }
+    }).fail(function(data) {
+        updateTestState(id, "error", data.error, indexers);
+        if (data.responseJSON.error !== undefined && notifyResult) {
+            var indexEnd = 2048 - "https://github.com/Jackett/Jackett/issues/new?title=[".length - id.length - "] ".length - " (Test)".length; // keep url <= 2k #5104
+            doNotify("An error occurred while testing this indexer<br /><b>" + data.responseJSON.error.substring(0, indexEnd) + "</b><br /><i><a href=\"https://github.com/Jackett/Jackett/issues/new?title=[" + id + "] " + data.responseJSON.error.substring(0, indexEnd) + " (Test)\" target=\"_blank\">Click here to open an issue on GitHub for this indexer.</a><i>", "danger", "glyphicon glyphicon-alert", false);
+        } else {
+            doNotify("An error occurred while testing indexers, please take a look at indexers with failed test for more informations.", "danger", "glyphicon glyphicon-alert");
+        }
     });
 }
 
 function prepareTestButtons(element) {
-    element.find(".indexer-button-test").each(function (i, btn) {
+    element.find(".indexer-button-test").each(function(i, btn) {
         var $btn = $(btn);
         var id = $btn.data("id");
         var state = $btn.data("state");
         var title = $btn.attr("title");
         $btn.tooltip();
         updateTestState(id, state, title, element);
-        $btn.click(function () {
+        $btn.click(function() {
             testIndexer(id, true);
         });
     });
 }
 
 function displayIndexerSetup(id, name, caps, link, alternativesitelinks, description) {
-    api.getIndexerConfig(id, function (data) {
+    api.getIndexerConfig(id, function(data) {
         if (data.result !== undefined && data.result == "error") {
             doNotify("Error: " + data.error, "danger", "glyphicon glyphicon-alert");
             return;
         }
 
         populateSetupForm(id, name, data, caps, link, alternativesitelinks, description);
-    }).fail(function () {
+    }).fail(function() {
         doNotify("Request to Jackett server failed", "danger", "glyphicon glyphicon-alert");
     });
 
@@ -521,8 +526,7 @@ function populateConfigItems(configForm, config) {
         if (config[i].type === 'recaptcha') {
             hasReacaptcha = true;
             captchaItem = config[i];
-        }
-        else if (config[i].id === 'cookieheader' && hasReacaptcha) { // inject cookie into captcha item
+        } else if (config[i].id === 'cookieheader' && hasReacaptcha) { // inject cookie into captcha item
             captchaItem.cookieheader = config[i].value;
             console.log(captchaItem);
         }
@@ -599,7 +603,7 @@ function newConfigModal(title, config, caps, link, alternativesitelinks, descrip
         var AlternativeSiteLinksTemplate = Handlebars.compile($("#setup-item-alternativesitelinks").html());
         var template = $(AlternativeSiteLinksTemplate({ "alternativesitelinks": alternativesitelinks }));
         configForm.find("div[data-id='sitelink']").after(template);
-        template.find("a.alternativesitelink").click(function (a) {
+        template.find("a.alternativesitelink").click(function(a) {
             $("div[data-id='sitelink'] input").val(this.href);
             return false;
         });
@@ -610,7 +614,7 @@ function newConfigModal(title, config, caps, link, alternativesitelinks, descrip
 
 function getConfigModalJson(configForm) {
     var configJson = [];
-    configForm.find(".config-setup-form").children().each(function (i, el) {
+    configForm.find(".config-setup-form").children().each(function(i, el) {
         $el = $(el);
         var type = $el.data("type");
         var id = $el.data("id");
@@ -627,8 +631,8 @@ function getConfigModalJson(configForm) {
                 break;
             case "inputcheckbox":
                 itemEntry.values = [];
-                $el.find(".setup-item-inputcheckbox input:checked").each(function () {
-                  itemEntry.values.push($(this).val());
+                $el.find(".setup-item-inputcheckbox input:checked").each(function() {
+                    itemEntry.values.push($(this).val());
                 });
             case "inputselect":
                 itemEntry.value = $el.find(".setup-item-inputselect select").val();
@@ -660,14 +664,14 @@ function getConfigModalJson(configForm) {
 function populateSetupForm(indexerId, name, config, caps, link, alternativesitelinks, description) {
     var configForm = newConfigModal(name, config, caps, link, alternativesitelinks, description);
     var $goButton = configForm.find(".setup-indexer-go");
-    $goButton.click(function () {
+    $goButton.click(function() {
         var data = getConfigModalJson(configForm);
 
         var originalBtnText = $goButton.html();
         $goButton.prop('disabled', true);
         $goButton.html($('#spinner').html());
 
-        api.updateIndexerConfig(indexerId, data, function (data) {
+        api.updateIndexerConfig(indexerId, data, function(data) {
             if (data == undefined) {
                 configForm.modal("hide");
                 reloadIndexers();
@@ -678,22 +682,22 @@ function populateSetupForm(indexerId, name, config, caps, link, alternativesitel
                 }
                 doNotify("Configuration failed: " + data.error, "danger", "glyphicon glyphicon-alert");
             }
-        }).fail(function (data) {
-          if(data.responseJSON.error !== undefined) {
-            var indexEnd = 2048 - "https://github.com/Jackett/Jackett/issues/new?title=[".length - indexerId.length - "] ".length - " (Config)".length; // keep url <= 2k #5104
-            doNotify("An error occurred while updating this indexer<br /><b>" + data.responseJSON.error.substring(0, indexEnd) + "</b><br /><i><a href=\"https://github.com/Jackett/Jackett/issues/new?title=[" + indexerId + "] " + data.responseJSON.error.substring(0, indexEnd) + " (Config)\" target=\"_blank\">Click here to open an issue on GitHub for this indexer.</a><i>", "danger", "glyphicon glyphicon-alert", false);
-          } else {
-            doNotify("An error occurred while updating this indexer, request to Jackett server failed, is server running ?", "danger", "glyphicon glyphicon-alert");
-          }
-        }).always(function () {
+        }).fail(function(data) {
+            if (data.responseJSON.error !== undefined) {
+                var indexEnd = 2048 - "https://github.com/Jackett/Jackett/issues/new?title=[".length - indexerId.length - "] ".length - " (Config)".length; // keep url <= 2k #5104
+                doNotify("An error occurred while updating this indexer<br /><b>" + data.responseJSON.error.substring(0, indexEnd) + "</b><br /><i><a href=\"https://github.com/Jackett/Jackett/issues/new?title=[" + indexerId + "] " + data.responseJSON.error.substring(0, indexEnd) + " (Config)\" target=\"_blank\">Click here to open an issue on GitHub for this indexer.</a><i>", "danger", "glyphicon glyphicon-alert", false);
+            } else {
+                doNotify("An error occurred while updating this indexer, request to Jackett server failed, is server running ?", "danger", "glyphicon glyphicon-alert");
+            }
+        }).always(function() {
             $goButton.html(originalBtnText);
             $goButton.prop('disabled', false);
         });
     });
 
-    configForm.on('hidden.bs.modal', function (e) {
+    configForm.on('hidden.bs.modal', function(e) {
         $('#indexers div.dataTables_filter input').focusWithoutScrolling();
-        });
+    });
     configForm.modal("show");
 }
 
@@ -734,8 +738,7 @@ function clearNotifications() {
     $('[data-notify="container"]').remove();
 }
 
-function updateReleasesRow(row)
-{
+function updateReleasesRow(row) {
     var labels = $(row).find("span.release-labels");
     var TitleLink = $(row).find("td.Title > a");
     var IMDBId = $(row).data("imdb");
@@ -784,7 +787,7 @@ function updateReleasesRow(row)
 }
 
 function showSearch(selectedIndexer, query, category) {
-   
+
     var selectedIndexers = [];
     if (selectedIndexer)
         selectedIndexers = selectedIndexer.split(",");
@@ -796,16 +799,16 @@ function showSearch(selectedIndexer, query, category) {
 
     $("#modals").append(releaseDialog);
 
-    releaseDialog.on('shown.bs.modal', function () {
+    releaseDialog.on('shown.bs.modal', function() {
         releaseDialog.find('#searchquery').focusWithoutScrolling();
     });
 
-    releaseDialog.on('hidden.bs.modal', function (e) {
+    releaseDialog.on('hidden.bs.modal', function(e) {
         $('#indexers div.dataTables_filter input').focusWithoutScrolling();
         window.location.hash = '';
-    }) ;
+    });
 
-    var setCategories = function (trackers, items) {
+    var setCategories = function(trackers, items) {
         var cats = {};
         for (var i = 0; i < items.length; i++) {
             if (trackers.length == 0 || $.inArray(items[i].id, trackers) !== -1) {
@@ -819,20 +822,20 @@ function showSearch(selectedIndexer, query, category) {
         var select = $('#searchCategory');
         var selected = select.val();
         var options = []
-        $.each(cats, function (ID, Name) {
+        $.each(cats, function(ID, Name) {
             options.push({ label: ID + ' (' + Name + ')', value: ID });
         });
         select.multiselect('dataprovider', options);
         select.val(selected).multiselect("refresh");
     };
 
-    $('#searchTracker').change(jQuery.proxy(function () {
+    $('#searchTracker').change(jQuery.proxy(function() {
         var trackerIds = $('#searchTracker').val();
         setCategories(trackerIds, this.items);
     }, { items: configuredIndexers }));
 
     var queryField = document.getElementById("searchquery");
-    queryField.addEventListener("keyup", function (event) {
+    queryField.addEventListener("keyup", function(event) {
         event.preventDefault();
         if (event.keyCode == 13) {
             document.getElementById("jackett-search-perform").click();
@@ -840,7 +843,7 @@ function showSearch(selectedIndexer, query, category) {
     });
 
     var searchButton = $('#jackett-search-perform');
-    searchButton.click(function () {
+    searchButton.click(function() {
         if ($('#jackett-search-perform span').hasClass("spinner")) {
             // We are searchin already
             return;
@@ -853,9 +856,9 @@ function showSearch(selectedIndexer, query, category) {
         };
 
         window.location.hash = Object.entries({
-          search: encodeURIComponent(queryObj.Query).replace(/%20/g,'+'),
-          tracker: queryObj.Tracker.join(","),
-          category: queryObj.Category.join(",")
+            search: encodeURIComponent(queryObj.Query).replace(/%20/g, '+'),
+            tracker: queryObj.Tracker.join(","),
+            category: queryObj.Category.join(",")
         }).map(([k, v], i) => k + '=' + v).join('&');
 
         $('#jackett-search-perform').html($('#spinner').html());
@@ -863,7 +866,7 @@ function showSearch(selectedIndexer, query, category) {
         clearSearchResultTable($('#searchResults'));
 
         var trackerId = "all";
-        api.resultsForIndexer(trackerId, queryObj, function (data) {
+        api.resultsForIndexer(trackerId, queryObj, function(data) {
             for (var i = 0; i < data.Results.length; i++) {
                 var item = data.Results[i];
                 item.Title = insertWordWrap(item.Title);
@@ -875,7 +878,7 @@ function showSearch(selectedIndexer, query, category) {
             searchResults.empty();
             updateSearchResultTable(searchResults, data).search('').columns().search('').draw();
             searchResults.find('div.dataTables_filter input').focusWithoutScrolling();
-        }).fail(function () {
+        }).fail(function() {
             $('#jackett-search-perform').html($('#search-button-ready').html());
             doNotify("Request to Jackett server failed", "danger", "glyphicon glyphicon-alert");
         });
@@ -927,7 +930,7 @@ function clearSearchResultTable(element) {
 
 // dataTable dead torrent filter
 $.fn.dataTable.ext.search = [
-    function (settings, data, dataIndex) {
+    function(settings, data, dataIndex) {
         if (settings.sInstance != "jackett-search-results-datatable")
             return true;
         var deadfiltercheckbox = $(settings.nTableWrapper).find(".dataTables_deadfilter input");
@@ -944,162 +947,164 @@ $.fn.dataTable.ext.search = [
 function updateSearchResultTable(element, results) {
     var resultsTemplate = Handlebars.compile($("#jackett-search-results").html());
     element.html($(resultsTemplate(results)));
-    element.find('tr.jackett-search-results-row').each(function () { updateReleasesRow(this); });
+    element.find('tr.jackett-search-results-row').each(function() { updateReleasesRow(this); });
     var settings = { "deadfilter": true };
-    var datatable = element.find('table').DataTable(
-        {
-            "fnStateSaveParams": function (oSettings, sValue) {
-                sValue.search.search = ""; // don't save the search filter content
-                sValue.deadfilter = settings.deadfilter;
-                return sValue;
-            },
-            "fnStateLoadParams": function (oSettings, sValue) {
-                if ("deadfilter" in sValue)
-                    settings.deadfilter = sValue.deadfilter;
-            },
+    var datatable = element.find('table').DataTable({
+        "fnStateSaveParams": function(oSettings, sValue) {
+            sValue.search.search = ""; // don't save the search filter content
+            sValue.deadfilter = settings.deadfilter;
+            return sValue;
+        },
+        "fnStateLoadParams": function(oSettings, sValue) {
+            if ("deadfilter" in sValue)
+                settings.deadfilter = sValue.deadfilter;
+        },
 
-            "dom": "lfr<\"dataTables_deadfilter\">tip",
-            "stateSave": true,
-            "stateDuration": 0,
-            "bAutoWidth": false,
-            "pageLength": 20,
-            "lengthMenu": [[10, 20, 50, 100, 250, 500, -1], [10, 20, 50, 100, 250, 500, "All"]],
-            "order": [[0, "desc"]],
-            "columnDefs": [
-                {
-                    "targets": 0,
-                    "visible": false,
-                    "searchable": false,
-                    "type": 'date'
-                },
-                {
-                    "targets": 1,
-                    "visible": true,
-                    "searchable": false,
-                    "iDataSort": 0
-                },
-                {
-                    "targets": 4,
-                    "visible": false,
-                    "searchable": false,
-                    "type": 'num'
-                },
-                {
-                    "targets": 5,
-                    "visible": true,
-                    "searchable": false,
-                    "iDataSort": 4
-                }
-            ],
-            fnPreDrawCallback: function () {
-                var table = this;
+        "dom": "lfr<\"dataTables_deadfilter\">tip",
+        "stateSave": true,
+        "stateDuration": 0,
+        "bAutoWidth": false,
+        "pageLength": 20,
+        "lengthMenu": [
+            [10, 20, 50, 100, 250, 500, -1],
+            [10, 20, 50, 100, 250, 500, "All"]
+        ],
+        "order": [
+            [0, "desc"]
+        ],
+        "columnDefs": [{
+                "targets": 0,
+                "visible": false,
+                "searchable": false,
+                "type": 'date'
+            },
+            {
+                "targets": 1,
+                "visible": true,
+                "searchable": false,
+                "iDataSort": 0
+            },
+            {
+                "targets": 4,
+                "visible": false,
+                "searchable": false,
+                "type": 'num'
+            },
+            {
+                "targets": 5,
+                "visible": true,
+                "searchable": false,
+                "iDataSort": 4
+            }
+        ],
+        fnPreDrawCallback: function() {
+            var table = this;
 
-                var inputSearch = element.find("input[type=search]");
-                if (!inputSearch.attr("custom")) {
-                  var newInputSearch = inputSearch.clone();
-                  newInputSearch.attr("custom", "true");
-                  newInputSearch.attr("data-toggle", "tooltip");
-		  newInputSearch.attr("placeholder","Filter from results here");
-                  newInputSearch.attr("title", "Keyword starting with &quot;-&quot; is considered a negative match.Search query consists of several keywords.\nKeyword starting with \"-\" is considered a negative match.");
-                  newInputSearch.on("input", function () {
+            var inputSearch = element.find("input[type=search]");
+            if (!inputSearch.attr("custom")) {
+                var newInputSearch = inputSearch.clone();
+                newInputSearch.attr("custom", "true");
+                newInputSearch.attr("data-toggle", "tooltip");
+                newInputSearch.attr("placeholder", "Filter from results here");
+                newInputSearch.attr("title", "Keyword starting with &quot;-&quot; is considered a negative match.Search query consists of several keywords.\nKeyword starting with \"-\" is considered a negative match.");
+                newInputSearch.on("input", function() {
                     var newKeywords = [];
                     var filterTextKeywords = $(this).val().split(" ");
                     $.each(filterTextKeywords, function(index, keyword) {
-                      if (keyword === "" || keyword === "+" || keyword === "-")
-                        return;
-                      var newKeyword;
-                      if (keyword.startsWith("+"))
-                        newKeyword = $.fn.dataTable.util.escapeRegex(keyword.substring(1));
-                      else if (keyword.startsWith("-"))
-                        newKeyword = "^((?!" + $.fn.dataTable.util.escapeRegex(keyword.substring(1)) + ").)*$";
-                      else
-                        newKeyword = $.fn.dataTable.util.escapeRegex(keyword);
-                      newKeywords.push(newKeyword);
+                        if (keyword === "" || keyword === "+" || keyword === "-")
+                            return;
+                        var newKeyword;
+                        if (keyword.startsWith("+"))
+                            newKeyword = $.fn.dataTable.util.escapeRegex(keyword.substring(1));
+                        else if (keyword.startsWith("-"))
+                            newKeyword = "^((?!" + $.fn.dataTable.util.escapeRegex(keyword.substring(1)) + ").)*$";
+                        else
+                            newKeyword = $.fn.dataTable.util.escapeRegex(keyword);
+                        newKeywords.push(newKeyword);
                     });
                     var filterText = newKeywords.join(" ");
                     table.api().search(filterText, true, true).draw();
-                  });
-                  inputSearch.replaceWith(newInputSearch);
-                }
-
-                var deadfilterdiv = element.find(".dataTables_deadfilter");
-                var deadfiltercheckbox = deadfilterdiv.find("input");
-                if (!deadfiltercheckbox.length) {
-                    deadfilterlabel = $('<label><input type="checkbox" id="jackett-search-results-datatable_deadfilter_checkbox" value="1"> Show dead torrents</label>'
-                        );
-                    deadfilterdiv.append(deadfilterlabel);
-                    deadfiltercheckbox = deadfilterlabel.find("input");
-                    deadfiltercheckbox.on("change", function () {
-                        settings.deadfilter = this.checked;
-                        table.api().draw();
-                    });
-                    deadfiltercheckbox.prop('checked', settings.deadfilter);
-                }
-            },
-            initComplete: function () {
-                var count = 0;
-                this.api().columns().every(function () {
-                    count++;
-                    if (count === 3 || count === 8) {
-                        var column = this;
-                        var select = $('<select><option value=""></option></select>')
-                            .appendTo($(column.footer()).empty())
-                            .on('change', function () {
-                                var val = $.fn.dataTable.util.escapeRegex(
-                                    $(this).val()
-                                );
-
-                                column
-                                    .search(val ? '^' + val + '$' : '', true, false)
-                                    .draw();
-                            });
-
-                        column.data().unique().sort().each(function (d, j) {
-                            select.append('<option value="' + d + '">' + d + '</option>')
-                        });
-                    }
                 });
+                inputSearch.replaceWith(newInputSearch);
             }
-        });
+
+            var deadfilterdiv = element.find(".dataTables_deadfilter");
+            var deadfiltercheckbox = deadfilterdiv.find("input");
+            if (!deadfiltercheckbox.length) {
+                deadfilterlabel = $('<label><input type="checkbox" id="jackett-search-results-datatable_deadfilter_checkbox" value="1"> Show dead torrents</label>');
+                deadfilterdiv.append(deadfilterlabel);
+                deadfiltercheckbox = deadfilterlabel.find("input");
+                deadfiltercheckbox.on("change", function() {
+                    settings.deadfilter = this.checked;
+                    table.api().draw();
+                });
+                deadfiltercheckbox.prop('checked', settings.deadfilter);
+            }
+        },
+        initComplete: function() {
+            var count = 0;
+            this.api().columns().every(function() {
+                count++;
+                if (count === 3 || count === 8) {
+                    var column = this;
+                    var select = $('<select><option value=""></option></select>')
+                        .appendTo($(column.footer()).empty())
+                        .on('change', function() {
+                            var val = $.fn.dataTable.util.escapeRegex(
+                                $(this).val()
+                            );
+
+                            column
+                                .search(val ? '^' + val + '$' : '', true, false)
+                                .draw();
+                        });
+
+                    column.data().unique().sort().each(function(d, j) {
+                        select.append('<option value="' + d + '">' + d + '</option>')
+                    });
+                }
+            });
+        }
+    });
     return datatable;
 }
 
 function bindUIButtons() {
-    $('body').on('click', '.downloadlink', function (e, b) {
+    $('body').on('click', '.downloadlink', function(e, b) {
         $(e.target).addClass('jackettdownloaded');
     });
 
-    $('body').on('click', '.jacketdownloadserver', function (event) {
+    $('body').on('click', '.jacketdownloadserver', function(event) {
         var href = $(event.target).parent().attr('href');
-        var jqxhr = $.get(href, function (data) {
+        var jqxhr = $.get(href, function(data) {
             if (data.result == "error") {
                 doNotify("Error: " + data.error, "danger", "glyphicon glyphicon-alert");
                 return;
             } else {
                 doNotify("Downloaded sent to the blackhole successfully.", "success", "glyphicon glyphicon-ok");
             }
-        }).fail(function () {
+        }).fail(function() {
             doNotify("Request to Jackett server failed", "danger", "glyphicon glyphicon-alert");
         });
         event.preventDefault();
         return false;
     });
 
-    $('#jackett-add-indexer').click(function () {
+    $('#jackett-add-indexer').click(function() {
         $("#modals").empty();
         displayUnconfiguredIndexersList();
     });
 
-    $("#jackett-test-all").click(function () {
-        $(".indexer-button-test").each(function (i, btn) {
+    $("#jackett-test-all").click(function() {
+        $(".indexer-button-test").each(function(i, btn) {
             var $btn = $(btn);
             var id = $btn.data("id");
             testIndexer(id, false);
         });
     });
 
-    $("#jackett-show-releases").click(function () {
-        api.getServerCache(function (data) {
+    $("#jackett-show-releases").click(function() {
+        api.getServerCache(function(data) {
             for (var i = 0; i < data.length; i++) {
                 var item = data[i];
                 item.Title = insertWordWrap(item.Title);
@@ -1109,107 +1114,110 @@ function bindUIButtons() {
             var item = { releases: data, Title: 'Releases' };
             var releaseDialog = $(releaseTemplate(item));
             var table = releaseDialog.find('table');
-            releaseDialog.find('tr.jackett-releases-row').each(function () { updateReleasesRow(this); });
-            releaseDialog.on('hidden.bs.modal', function (e) {
+            releaseDialog.find('tr.jackett-releases-row').each(function() { updateReleasesRow(this); });
+            releaseDialog.on('hidden.bs.modal', function(e) {
                 $('#indexers div.dataTables_filter input').focusWithoutScrolling();
             });
 
-            table.DataTable(
-                 {
-                     "stateSave": true,
-                     "stateDuration": 0,
-                     "bAutoWidth": false,
-                     "pageLength": 20,
-                     "lengthMenu": [[10, 20, 50, -1], [10, 20, 50, "All"]],
-                     "order": [[0, "desc"]],
-                     "columnDefs": [
-                        {
-                            "targets": 0,
-                            "visible": false,
-                            "searchable": false,
-                            "type": 'date'
-                        },
-                        {
-                            "targets": 1,
-                            "visible": false,
-                            "searchable": false,
-                            "type": 'date'
-                        },
-                        {
-                            "targets": 2,
-                            "visible": true,
-                            "searchable": false,
-                            "iDataSort": 0
-                        },
-                        {
-                            "targets": 3,
-                            "visible": true,
-                            "searchable": false,
-                            "iDataSort": 1
-                        },
-                        {
-                            "targets": 6,
-                            "visible": false,
-                            "searchable": false,
-                            "type": 'num'
-                        },
-                        {
-                            "targets": 7,
-                            "visible": true,
-                            "searchable": false,
-                            "iDataSort": 6
+            table.DataTable({
+                "stateSave": true,
+                "stateDuration": 0,
+                "bAutoWidth": false,
+                "pageLength": 20,
+                "lengthMenu": [
+                    [10, 20, 50, -1],
+                    [10, 20, 50, "All"]
+                ],
+                "order": [
+                    [0, "desc"]
+                ],
+                "columnDefs": [{
+                        "targets": 0,
+                        "visible": false,
+                        "searchable": false,
+                        "type": 'date'
+                    },
+                    {
+                        "targets": 1,
+                        "visible": false,
+                        "searchable": false,
+                        "type": 'date'
+                    },
+                    {
+                        "targets": 2,
+                        "visible": true,
+                        "searchable": false,
+                        "iDataSort": 0
+                    },
+                    {
+                        "targets": 3,
+                        "visible": true,
+                        "searchable": false,
+                        "iDataSort": 1
+                    },
+                    {
+                        "targets": 6,
+                        "visible": false,
+                        "searchable": false,
+                        "type": 'num'
+                    },
+                    {
+                        "targets": 7,
+                        "visible": true,
+                        "searchable": false,
+                        "iDataSort": 6
+                    }
+                ],
+                initComplete: function() {
+                    var count = 0;
+                    this.api().columns().every(function() {
+                        count++;
+                        if (count === 5 || count === 10) {
+                            var column = this;
+                            var select = $('<select><option value=""></option></select>')
+                                .appendTo($(column.footer()).empty())
+                                .on('change', function() {
+                                    var val = $.fn.dataTable.util.escapeRegex(
+                                        $(this).val()
+                                    );
+
+                                    column
+                                        .search(val ? '^' + val + '$' : '', true, false)
+                                        .draw();
+                                });
+
+                            column.data().unique().sort().each(function(d, j) {
+                                select.append('<option value="' + d + '">' + d + '</option>')
+                            });
                         }
-                     ],
-                     initComplete: function () {
-                         var count = 0;
-                         this.api().columns().every(function () {
-                             count++;
-                             if (count === 5 || count === 10) {
-                                 var column = this;
-                                 var select = $('<select><option value=""></option></select>')
-                                     .appendTo($(column.footer()).empty())
-                                     .on('change', function () {
-                                         var val = $.fn.dataTable.util.escapeRegex(
-                                             $(this).val()
-                                         );
-
-                                         column
-                                             .search(val ? '^' + val + '$' : '', true, false)
-                                             .draw();
-                                     });
-
-                                 column.data().unique().sort().each(function (d, j) {
-                                     select.append('<option value="' + d + '">' + d + '</option>')
-                                 });
-                             }
-                         });
-                     }
-                 });
+                    });
+                }
+            });
             $("#modals").append(releaseDialog);
             releaseDialog.modal("show");
-        }).fail(function () {
+        }).fail(function() {
             doNotify("Request to Jackett server failed", "danger", "glyphicon glyphicon-alert");
         });
     });
 
-    $("#jackett-show-search").click(function () {
+    $("#jackett-show-search").click(function() {
         showSearch(null);
         window.location.hash = "search";
     });
 
-    $("#view-jackett-logs").click(function () {
-        api.getServerLogs(function (data) {
+    $("#view-jackett-logs").click(function() {
+        api.getServerLogs(function(data) {
             var releaseTemplate = Handlebars.compile($("#jackett-logs").html());
             var item = { logs: data };
             var releaseDialog = $(releaseTemplate(item));
             $("#modals").append(releaseDialog);
             releaseDialog.modal("show");
-        }).fail(function () {
+        }).fail(function() {
             doNotify("Request to Jackett server failed", "danger", "glyphicon glyphicon-alert");
         });
     });
 
-    $("#change-jackett-port").click(function () {
+    $("#change-jackett-port").click(function() {
         var jackett_port = Number($("#jackett-port").val());
         var jackett_basepathoverride = $("#jackett-basepathoverride").val();
         var jackett_external = $("#jackett-allowext").is(':checked');
@@ -1241,12 +1249,12 @@ function bindUIButtons() {
             proxy_username: jackett_proxy_username,
             proxy_password: jackett_proxy_password
         };
-        api.updateServerConfig(jsonObject, function (data) {
+        api.updateServerConfig(jsonObject, function(data) {
             doNotify("Redirecting you to complete configuration update..", "success", "glyphicon glyphicon-ok");
-            window.setTimeout(function () {
+            window.setTimeout(function() {
                 window.location.reload(true);
             }, 3000);
-        }).fail(function (data) {
+        }).fail(function(data) {
             if (data.responseJSON !== undefined && data.responseJSON.result == "error") {
                 doNotify("Error: " + data.responseJSON.error, "danger", "glyphicon glyphicon-alert");
                 return;
@@ -1256,39 +1264,39 @@ function bindUIButtons() {
         });
     });
 
-    $("#trigger-updater").click(function () {
-        api.updateServer(function (data) {
+    $("#trigger-updater").click(function() {
+        api.updateServer(function(data) {
             if (data.result == "error") {
                 doNotify("Error: " + data.error, "danger", "glyphicon glyphicon-alert");
                 return;
             } else {
                 doNotify("Updater triggered see log for details..", "success", "glyphicon glyphicon-ok");
             }
-        }).fail(function () {
+        }).fail(function() {
             doNotify("Request to Jackett server failed", "danger", "glyphicon glyphicon-alert");
         });
     });
 
-    $("#change-jackett-password").click(function () {
+    $("#change-jackett-password").click(function() {
         var password = $("#jackett-adminpwd").val();
 
-        api.updateAdminPassword(password, function (data) {
+        api.updateAdminPassword(password, function(data) {
             if (data == undefined) {
                 doNotify("Admin password has been set.", "success", "glyphicon glyphicon-ok");
 
-                window.setTimeout(function () {
+                window.setTimeout(function() {
                     window.location = window.location.pathname;
                 }, 1000);
             } else if (data.result == "error") {
                 doNotify("Error: " + data.error, "danger", "glyphicon glyphicon-alert");
                 return;
             }
-        }).fail(function () {
+        }).fail(function() {
             doNotify("Request to Jackett server failed", "danger", "glyphicon glyphicon-alert");
         });
     });
 
-    $('#jackett-proxy-url').on('input', function () {
+    $('#jackett-proxy-url').on('input', function() {
         proxyWarning($(this).val());
     });
 }
@@ -1296,9 +1304,7 @@ function bindUIButtons() {
 function proxyWarning(input) {
     if (input != null && input.trim() !== "") {
         $('#proxy-warning').show();
-    }
-    else
-    {
+    } else {
         $('#proxy-warning').hide();
     }
 }
