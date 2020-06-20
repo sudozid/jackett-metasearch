@@ -14,6 +14,7 @@ What more should be done?
 2. The search results should be displayed better on mobile
 3. Category buttons like on many torrent sites
 4. Search result should be displayed on a different window/page.
+5. Make the code less messy 
 
 
 I really needed a way to search torrents from public trackers; I have previously setup a DHT Scraper on my VPS but that just scrapes a ton of garbage. NZBHydra can be used with Jackett for searching content on torrent sites but it adds another unnecessary step as Jackett already has Manual Search built in.
