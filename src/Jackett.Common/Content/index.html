@@ -1,13 +1,15 @@
 <!DOCTYPE html>
 
 <html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+
 <head>
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <meta name="viewport" content="user-scalable=no, width=device-width, initial-scale=1.0" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="mobile-web-app-capable" content="yes" />
     <meta name="apple-mobile-web-app-capable" content="yes" />
     <meta charset="utf-8" />
-    <meta name="referrer" content="no-referrer" /> <!-- Don't send referrer when loading third party ressources (E.g. Empornium banner images won't load) -->
+    <meta name="referrer" content="no-referrer" />
+    <!-- Don't send referrer when loading third party ressources (E.g. Empornium banner images won't load) -->
     <link rel="apple-touch-icon" href="../apple-touch-icon.png" />
     <link rel="apple-touch-icon" sizes="57x57" href="../apple-touch-icon-57x57.png" />
     <link rel="apple-touch-icon" sizes="72x72" href="../apple-touch-icon-72x72.png" />
@@ -20,34 +22,34 @@
     <link rel="mask-icon" href="../jackett_medium.png" color="#35c5f4">
     <link rel="icon" type="image/ico" href="../favicon.ico" />
     <link rel='shortcut icon' type='image/x-icon' href='../favicon.ico' />
-    <script type="text/javascript" src="../libs/filesize.min.js?changed=2017083001"></script>
-    <script type="text/javascript" src="../libs/jquery.min.js?changed=2017083001"></script>
-    <script type="text/javascript" src="../libs/jquery.dataTables.min.js?changed=2017083001" charset="utf8"></script>
-    <script type="text/javascript" src="../libs/handlebars.min.js?changed=2017083001"></script>
-    <script type="text/javascript" src="../libs/moment.min.js?changed=2017083001"></script>
-    <script type="text/javascript" src="../libs/handlebarsmoment.js?changed=2017083001"></script>
-    <script type="text/javascript" src="../libs/handlebarsextend.js?changed=2017083001"></script>
-    <script type="text/javascript" src="../bootstrap/bootstrap.min.js?changed=2017083001"></script>
-    <script type="text/javascript" src="../libs/bootstrap-notify.js?changed=2017083001"></script>
-    <script type="text/javascript" src="../libs/bootstrap-multiselect.js?changed=2017083001"></script>
-    <!--<script type="text/javascript" src="https://www.google.com/recaptcha/api.js?render=explicit" async defer></script>-->
+    <script src="../libs/filesize.min.js?changed=2017083001"></script>
+    <script src="../libs/jquery.min.js?changed=2017083001"></script>
+    <script src="../libs/jquery.dataTables.min.js?changed=2017083001"></script>
+    <script src="../libs/handlebars.min.js?changed=2017083001"></script>
+    <script src="../libs/moment.min.js?changed=2017083001"></script>
+    <script src="../libs/handlebarsmoment.js?changed=2017083001"></script>
+    <script src="../libs/handlebarsextend.js?changed=2017083001"></script>
+    <script src="../bootstrap/bootstrap.min.js?changed=2017083001"></script>
+    <script src="../libs/bootstrap-notify.js?changed=2017083001"></script>
+    <script src="../libs/bootstrap-multiselect.js?changed=2017083001"></script>
 
     <link rel="stylesheet" type="text/css" href="../bootstrap/bootstrap.min.css?changed=2017083001">
     <link rel="stylesheet" type="text/css" href="../animate.css?changed=2017083001">
-    <link rel="stylesheet" type="text/css" href="../custom.css?changed=20200223" media="only screen and (min-device-width: 480px)">
-    <link rel="stylesheet" type="text/css" href="../custom_mobile.css?changed=20200223" media="only screen and (max-device-width: 480px)">
+    <link rel="stylesheet" type="text/css" href="../custom.css?changed=20200223" media="only screen and (min-width: 480px)">
+    <link rel="stylesheet" type="text/css" href="../custom_mobile.css?changed=20200223" media="only screen and (max-width: 480px)">
     <link rel="stylesheet" type="text/css" href="../css/jquery.dataTables.min.css?changed=2017083001">
     <link rel="stylesheet" type="text/css" href="../css/bootstrap-multiselect.css?changed=2017083001" />
     <link rel="stylesheet" type="text/css" href="../css/font-awesome.min.css?changed=2017083001">
     <title>Jackett Search</title>
 </head>
+
 <body>
-    <div id="loading" style="text-align: center;position:relative;top:50px;color:white;font-size:16pt;">The page is loading, please wait...</div>    	
+    <div id="loading" style="text-align: center;position:relative;top:50px;color:white;font-size:16pt;">The page is loading, please wait...</div>
     <div id="modals"></div>
 
     <script id="setup-item-nonlocalrecaptcha" type="text/x-handlebars-template">
         <div class="setup-item-recaptcha">
-            <p>This site requires you to solve a ReCaptcha. It's no longer possible to solve the captcha in Jackett. Please enter the cookie for the site manually. <a href="https://github.com/Jackett/Jackett/wiki/Finding-cookies" target="_blank">See here</a> on how get the cookies.</p>
+            <p>This site requires you to solve a ReCaptcha. It's no longer possible to solve the captcha in Jackett. Please enter the cookie for the site manually. <a href="https://github.com/Jackett/Jackett/wiki/Finding-cookies" target="_blank">See here</a>                on how get the cookies.</p>
             <div class="setup-item-label">Full cookie header</div>
             <input class="form-control" type="text" value="{{cookieheader}}" />
         </div>
@@ -61,19 +63,15 @@
     <script id="setup-item-inputstring" type="text/x-handlebars-template">
         <div class="setup-item-inputstring">
             {{#if ispassword}}
-            <input class="form-control" type="password" value="{{{value}}}" />
-            {{else}}
-            <input class="form-control" type="text" value="{{{value}}}" />
-            {{/if}}
+            <input class="form-control" type="password" value="{{{value}}}" /> {{else}}
+            <input class="form-control" type="text" value="{{{value}}}" /> {{/if}}
         </div>
     </script>
     <script id="setup-item-inputbool" type="text/x-handlebars-template">
         <div class="setup-item-inputbool">
             {{#if value}}
-            <input type="checkbox" data-id="{{id}}" class="form-control" checked />
-            {{else}}
-            <input type="checkbox" data-id="{{id}}" class="form-control" />
-            {{/if}}
+            <input type="checkbox" data-id="{{id}}" class="form-control" checked /> {{else}}
+            <input type="checkbox" data-id="{{id}}" class="form-control" /> {{/if}}
         </div>
     </script>
     <script id="setup-item-inputcheckbox" type="text/x-handlebars-template">
@@ -201,12 +199,10 @@
                             <div class="indexer-buttons">
                                 <button title="Configure" class="btn btn-primary btn-xs indexer-setup" data-id="{{id}}" data-link="{{site_link}}">
                                     <span class="glyphicon glyphicon-wrench" aria-hidden="true"></span>
-                                </button>
-                                {{#if_eq type "public"}}
+                                </button> {{#if_eq type "public"}}
                                 <button title="Add" class="btn btn-success btn-xs indexer-add" data-id="{{id}}" data-link="{{site_link}}">
                                     <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
-                                </button>
-                                {{/if_eq}}
+                                </button> {{/if_eq}}
                             </div>
                         </td>
                     </tr>
@@ -272,14 +268,9 @@
                                     <td class="fit UploadVolumeFactor">{{UploadVolumeFactor}}</td>
                                     <td class="fit downloadcolumn">
                                         {{#if Link}}
-                                        <a class="downloadlink" title="Download locally" href="{{Link}}"><i class="fa fa-download"></i></a>
-                                        {{/if}}
-                                        {{#if MagnetUri}}
-                                        <a class="downloadlink" title="Download locally (magnet)" href="{{MagnetUri}}"><i class="fa fa-magnet"></i></a>
-                                        {{/if}}
-                                        {{#if BlackholeLink}}
-                                        <a class="downloadlink jacketdownloadserver" title="Save to server blackhole directory" href="{{BlackholeLink}}"><i class="fa fa-upload"></i></a>
-                                        {{/if}}
+                                        <a class="downloadlink" title="Download locally" href="{{Link}}"><i class="fa fa-download"></i></a> {{/if}} {{#if MagnetUri}}
+                                        <a class="downloadlink" title="Download locally (magnet)" href="{{MagnetUri}}"><i class="fa fa-magnet"></i></a> {{/if}} {{#if BlackholeLink}}
+                                        <a class="downloadlink jacketdownloadserver" title="Save to server blackhole directory" href="{{BlackholeLink}}"><i class="fa fa-upload"></i></a> {{/if}}
                                     </td>
                                 </tr>
                                 {{/each}}
@@ -320,42 +311,36 @@
                 <div class="modal-content">
                     <div class="modal-header">
                         <!-- <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button> -->
-                        <div align="center"> <img id="logo" src="../jacket_medium.png" alt="Logo"  /><span id="header-title">Jackett Search</span>
-                    </div>
-                    <div class="modal-body">
-			<div align="center">
-                        <input class="form-control" type="text" name="query" placeholder="Enter what you want here" style="height:50px;font-size:18px;" id="searchquery"/><br>
-                        <label for="tracker">Site</label>
-                        <select name="tracker" id="searchTracker" multiple="multiple">
+                        <div align="center"> <img id="logo" src="../jacket_medium.png" alt="Logo" /><span id="header-title">Jackett Search</span>
+                        </div>
+                        <div class="modal-body">
+                            <div align="center">
+                                <input class="form-control" type="text" name="query" placeholder="Enter what you want here" style="height:50px;font-size:18px;" id="searchquery" /><br>
+                                <label for="tracker">Site</label>
+                                <select name="tracker" id="searchTracker" multiple="multiple">
                             {{#each indexers}}
                             <option value="{{id}}" selected>{{name}}</option>
                             {{/each}}
                         </select>
-                        <label for="category">Category</label>
-                        <select name="category" id="searchCategory" multiple="multiple"></select>
-                        <button id="jackett-search-perform" class="btn btn-success btn-sm"><span class="fa fa-search"></span></button></div></div>
+                                <label for="category">Category</label>
+                                <select name="category" id="searchCategory" multiple="multiple"></select>
+                                <button id="jackett-search-perform" class="btn btn-success btn-sm"><span class="fa fa-search"></span></button></div>
+                        </div>
                         <div id="searchResults"></div>
                     </div>
-		</div>
                 </div>
             </div>
+        </div>
         </div>
     </script>
 
     <script id="jackett-search-results" type="text/x-handlebars-template">
         <div id="mobilenotice">
-	<p>Downloads are located on the last row, 
-	swipe right on table to see on mobile.</p>
-	</div>
-	</p>
-        <p style="text-align:center;">Your search was done using:
-            {{#each Indexers}}{{Name}}
-            {{#if Error}}
-            (<span title="{{Error}}"><b>Error</b></span>)
-            {{else}}
-            ({{Results}})
-            {{/if}}
-            , {{/each}}
+            <p>Downloads are located on the last row, swipe right on table to see on mobile.</p>
+        </div>
+        </p>
+        <p style="text-align:center;">Your search was done using: {{#each Indexers}}{{Name}} {{#if Error}} (
+            <span title="{{Error}}"><b>Error</b></span>) {{else}} ({{Results}}) {{/if}} , {{/each}}
         </p>
         <table id="jackett-search-results-datatable" class="dataTable compact cell-border hover stripe">
             <thead>
@@ -371,8 +356,8 @@
                     <th style="display:none;">Grabs</th>
                     <th id="see">Seeds</th>
                     <th>Leechers</th>
-		    <th style="display:none;"></th>
-		    <th style="display:none;"></th>
+                    <th style="display:none;"></th>
+                    <th style="display:none;"></th>
                     <th>Download</th>
                 </tr>
             </thead>
@@ -394,14 +379,9 @@
                     <td style="display:none;" class="UploadVolumeFactor">{{UploadVolumeFactor}}</td>
                     <td class="downloadcolumn">
                         {{#if Link}}
-                        <a class="downloadlink" title="Download locally" href="{{Link}}"><i class="fa fa-download"></i></a>
-                        {{/if}}
-                        {{#if MagnetUri}}
-                        <a class="downloadlink" title="Download locally (magnet)" href="{{MagnetUri}}"><i class="fa fa-magnet"></i></a>
-                        {{/if}}
-                        {{#if BlackholeLink}}
-                        <a class="downloadlink jacketdownloadserver" title="Save to server blackhole directory" href="{{BlackholeLink}}"><i class="fa fa-upload"></i></a>
-                        {{/if}}
+                        <a class="downloadlink" title="Download locally" href="{{Link}}"><i class="fa fa-download"></i></a> {{/if}} {{#if MagnetUri}}
+                        <a class="downloadlink" title="Download locally (magnet)" href="{{MagnetUri}}"><i class="fa fa-magnet"></i></a> {{/if}} {{#if BlackholeLink}}
+                        <a class="downloadlink jacketdownloadserver" title="Save to server blackhole directory" href="{{BlackholeLink}}"><i class="fa fa-upload"></i></a> {{/if}}
                     </td>
                 </tr>
                 {{/each}}
@@ -422,16 +402,16 @@
                     <td></td>
                     <td></td>
                     <td></td>
-		    
+
                 </tr>
             </tfoot>
         </table>
-	<hr>
-	<div id="footer">
+        <hr>
+        <div id="footer">
             <a href="https://github.com/Jackett/Jackett" target="_blank" title="Jackett on GitHub">Jackett</a> Version <span id="app-version">0.16.728.0</span>
-	    <br>
-	    <a href="https://github.com/misterpoop/jackett-metasearch" target="_blank" title="Metasearch Jackett">Help fix my terribly implemented mod of Jackett UI here</a>
-        </div>	
+            <br>
+            <a href="https://github.com/misterpoop/jackett-metasearch" target="_blank" title="Metasearch Jackett">Help fix my terribly implemented mod of Jackett UI here</a>
+        </div>
     </script>
     <script id="select-indexer" type="text/x-handlebars-template">
         <div id="select-indexer-modal" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">
@@ -539,13 +519,14 @@
         <span class="fa fa-search"></span>
     </script>
 
-    <script type="text/javascript" src="../libs/api.js?changed=2017083001"></script>
-    <script type="text/javascript" src="../custom.js?changed=20200410"></script>
+    <script src="../libs/api.js?changed=2017083001"></script>
+    <script src="../custom.js?changed=20200410"></script>
     <script>
-     function exec(){
-     showSearch();
-     $("#select-indexer-modal").off();
-	}
+        function exec() {
+            showSearch();
+            $("#select-indexer-modal").off();
+        }
     </script>
 </body>
+
 </html>
