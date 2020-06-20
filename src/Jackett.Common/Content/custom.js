@@ -59,6 +59,8 @@ function openSearchIfNecessary() {
         }, prev), {});
     //removed if hash.location #search search otherwise categories won't show up
     showSearch(hashArgs.tracker, hashArgs.search, hashArgs.category);
+    //hides the result tables until search button is actually triggered, probably a convoluted way of doing something easy
+    $("#results").hide();
     //disables event listeners of the backdrop
     $("#select-indexer-modal").off();
     //probably a stupid way to do it but this clicks on seeders th twice to sort by seeders

@@ -338,74 +338,76 @@
         <div id="mobilenotice">
             <p>Downloads are located on the last row, swipe right on table to see on mobile.</p>
         </div>
-        </p>
-        <p style="text-align:center;">Your search was done using: {{#each Indexers}}{{Name}} {{#if Error}} (
-            <span title="{{Error}}"><b>Error</b></span>) {{else}} ({{Results}}) {{/if}} , {{/each}}
-        </p>
-        <table id="jackett-search-results-datatable" class="dataTable compact cell-border hover stripe">
-            <thead>
-                <tr>
-                    <th>Published</th>
-                    <th>Published</th>
-                    <th>Website</th>
-                    <th>Name</th>
-                    <th>Size</th>
-                    <th>Size</th>
-                    <th style="display:none;">Files</th>
-                    <th>Category</th>
-                    <th style="display:none;">Grabs</th>
-                    <th id="see">Seeds</th>
-                    <th>Leechers</th>
-                    <th style="display:none;"></th>
-                    <th style="display:none;"></th>
-                    <th>Download</th>
-                </tr>
-            </thead>
-            <tbody>
-                {{#each Results}}
-                <tr class="jackett-search-results-row" data-imdb="{{Imdb}}" data-banner="{{BannerUrl}}" data-description="{{Description}}">
-                    <td>{{PublishDate}}</td>
-                    <td>{{jacketTimespan PublishDate}}</td>
-                    <td>{{Tracker}}</td>
-                    <td class="Title"><a href="{{Comments}}" target="_blank">{{Title}}</a> <span class="release-labels"></span></td>
-                    <td>{{Size}}</td>
-                    <td class="fit">{{jacketSize Size}}</td>
-                    <td style="display:none;">{{Files}}</td>
-                    <td>{{CategoryDesc}}</td>
-                    <td style="display:none;">{{Grabs}}</td>
-                    <td>{{Seeders}}</td>
-                    <td>{{Peers}}</td>
-                    <td style="display:none;" class="DownloadVolumeFactor">{{DownloadVolumeFactor}}</td>
-                    <td style="display:none;" class="UploadVolumeFactor">{{UploadVolumeFactor}}</td>
-                    <td class="downloadcolumn">
-                        {{#if Link}}
-                        <a class="downloadlink" title="Download locally" href="{{Link}}"><i class="fa fa-download"></i></a> {{/if}} {{#if MagnetUri}}
-                        <a class="downloadlink" title="Download locally (magnet)" href="{{MagnetUri}}"><i class="fa fa-magnet"></i></a> {{/if}} {{#if BlackholeLink}}
-                        <a class="downloadlink jacketdownloadserver" title="Save to server blackhole directory" href="{{BlackholeLink}}"><i class="fa fa-upload"></i></a> {{/if}}
-                    </td>
-                </tr>
-                {{/each}}
-            </tbody>
-            <tfoot>
-                <tr>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
+        <div id="results">
+            </p>
+            <p style="text-align:center;">Your search was done using: {{#each Indexers}}{{Name}} {{#if Error}} (
+                <span title="{{Error}}"><b>Error</b></span>) {{else}} ({{Results}}) {{/if}} , {{/each}}
+            </p>
+            <table id="jackett-search-results-datatable" class="dataTable compact cell-border hover stripe">
+                <thead>
+                    <tr>
+                        <th>Published</th>
+                        <th>Published</th>
+                        <th>Website</th>
+                        <th>Name</th>
+                        <th>Size</th>
+                        <th>Size</th>
+                        <th style="display:none;">Files</th>
+                        <th>Category</th>
+                        <th style="display:none;">Grabs</th>
+                        <th id="see">Seeds</th>
+                        <th>Leechers</th>
+                        <th style="display:none;"></th>
+                        <th style="display:none;"></th>
+                        <th>Download</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {{#each Results}}
+                    <tr class="jackett-search-results-row" data-imdb="{{Imdb}}" data-banner="{{BannerUrl}}" data-description="{{Description}}">
+                        <td>{{PublishDate}}</td>
+                        <td>{{jacketTimespan PublishDate}}</td>
+                        <td>{{Tracker}}</td>
+                        <td class="Title"><a href="{{Comments}}" target="_blank">{{Title}}</a> <span class="release-labels"></span></td>
+                        <td>{{Size}}</td>
+                        <td class="fit">{{jacketSize Size}}</td>
+                        <td style="display:none;">{{Files}}</td>
+                        <td>{{CategoryDesc}}</td>
+                        <td style="display:none;">{{Grabs}}</td>
+                        <td>{{Seeders}}</td>
+                        <td>{{Peers}}</td>
+                        <td style="display:none;" class="DownloadVolumeFactor">{{DownloadVolumeFactor}}</td>
+                        <td style="display:none;" class="UploadVolumeFactor">{{UploadVolumeFactor}}</td>
+                        <td class="downloadcolumn">
+                            {{#if Link}}
+                            <a class="downloadlink" title="Download locally" href="{{Link}}"><i class="fa fa-download"></i></a> {{/if}} {{#if MagnetUri}}
+                            <a class="downloadlink" title="Download locally (magnet)" href="{{MagnetUri}}"><i class="fa fa-magnet"></i></a> {{/if}} {{#if BlackholeLink}}
+                            <a class="downloadlink jacketdownloadserver" title="Save to server blackhole directory" href="{{BlackholeLink}}"><i class="fa fa-upload"></i></a> {{/if}}
+                        </td>
+                    </tr>
+                    {{/each}}
+                </tbody>
+                <tfoot>
+                    <tr>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
 
-                </tr>
-            </tfoot>
-        </table>
+                    </tr>
+                </tfoot>
+            </table>
+        </div>
         <hr>
         <div id="footer">
             <a href="https://github.com/Jackett/Jackett" target="_blank" title="Jackett on GitHub">Jackett</a> Version <span id="app-version">0.16.728.0</span>
