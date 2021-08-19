@@ -22,3 +22,5 @@ I really needed a way to search torrents from public trackers; I have previously
  I would greatly appreciate some help with making this look better and prevent anyone unauthorized from changing the indexers as the Javascript isn't changed at all (just not being executed or displayed).
  
 That said, it does indeed “work”, you will have to setup all the indexers normally and then modify the html,css,js files.
+
+I'm now making a updated version of this which runs on Python on top of an existing Jackett instance & communicates over API.
