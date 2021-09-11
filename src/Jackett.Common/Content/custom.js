@@ -3,7 +3,6 @@ var basePath = '';
 var indexers = [];
 var configuredIndexers = [];
 var unconfiguredIndexers = [];
-
 $.fn.inView = function() {
     if (!this.length) return false;
     var rect = this.get(0).getBoundingClientRect();
@@ -66,6 +65,8 @@ function openSearchIfNecessary() {
     //probably a stupid way to do it but this clicks on seeders th twice to sort by seeders
     $("#see").click();
     $("#see").click();
+    getJackettConfig(function(data){ $("#app-version").html(data.app_version);
+                               });
 }
 
 function insertWordWrap(str) {
